@@ -1,13 +1,13 @@
 package gamesim.gamerules;
 
-import gamesim.GameType;
+import gamesim.GameRuleSet;
 
 /**A MAD-like GameType.
  * T > R > S >P
  * @author DaJay42
  *
  */
-public class ChickenGame extends GameType {
+public class ChickenGame extends GameRuleSet {
 
 	@Override
 	public int R() {

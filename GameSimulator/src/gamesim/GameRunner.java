@@ -1,51 +1,66 @@
 package gamesim;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 /**GameSim execution model.
  * 
  * @author DaJay42
  */
-public class GameRunner {
+public class GameRunner /*implements Runnable*/ {
 	
 	GameTourney Tournament;
 	GameThread[] workers;
-	GameStrategy[] strats;
-	String[] results;
+	ArrayList<Class<? extends GameStrategy>> strats;
+	String[][] results;
 	
 	
 	
-	public GameRunner(GameTourney Tourney, GameType rules, GameStrategy[] strategies) throws InstantiationException, IllegalAccessException{		
-		Tournament = Tourney;
+	public GameRunner(Class<? extends GameRuleSet> rules,ArrayList<Class<? extends GameStrategy>> strategies, Class<? extends GameTourney> tourney, String...tourneyArgs) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{		
+		for(Constructor<?> c : tourney.getConstructors()){
+			if(c.getParameterTypes().length == 1 && c.getParameterTypes()[0] == String[].class){
+				Object[] o = {tourneyArgs};
+				this.Tournament = (GameTourney) c.newInstance(o);
+				break;
+			}
+		}
+		if(Tournament == null){
+			throw new InstantiationException("No suitable constructor found for class "+tourney.getName()+" with args "+tourneyArgs.toString());
+		}
+		
 		strats = strategies;
-		Tournament.ruleset = rules;
+		
+		Tournament.ruleset = rules.newInstance();
 		
 		Tournament.players = new ArrayList<GamePlayer>();
 		
-		for(GameStrategy s : strats){
+		for(Class<? extends GameStrategy> s : strats){
 			Tournament.players.add(new GamePlayer(s));
 		}
 		
 	}
 	
-	public void run() throws InstantiationException, IllegalAccessException{
-		Tournament.setup();
+	public void run() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 		
-		System.out.println("Tournament " + Tournament.getClass().getSimpleName()
-					+ " over " + Tournament.getRoundsPerGame() + " " + Tournament.getRoundsDescriptor()
-					+ " with rules "+ Tournament.ruleset.getClass().getSimpleName()
-					+ " and " + strats.length + " players.");
+		GameMain.out.println("Tournament " + Tournament.getClass().getSimpleName()
+				+ " over " + Tournament.getRoundsDescriptor()
+				+ " with rules "+ Tournament.ruleset.getClass().getSimpleName()
+				+ " and " + strats.size() + " players.");
+		
 		
 		String text = "Players: ";
-		for(int i = 0; i < strats.length; i++){
-			text = text + i+": "+ strats[i].getClass().getSimpleName()+", ";
+		for(int i = 0; i < strats.size(); i++){
+			text = text + i+": "+ strats.get(i).getSimpleName()+", ";
 			if(i % 5 == 4){
 				text = text + "\n";
 			}
 		}
-		System.out.println(text);
-		System.out.println("-----");
-		
+		GameMain.out.println(text);
+
+		GameMain.out.println("-----");
+
+		Tournament.setup();
 		
 		while(!Tournament.isFinished()){
 			workers = Tournament.getNextMatchUp();
@@ -60,12 +75,15 @@ public class GameRunner {
 			Tournament.resetPlayers();
 		}
 		
-		
+
+		GameMain.out.println("-----");
 		
 		results = Tournament.printResults();
 		
-		for(String line : results){
-			System.out.println(line);
+		for(String[] result : results){
+			for(String line : result){
+				GameMain.out.println(line);
+			}
 		}
 	}
 	

@@ -7,7 +7,7 @@ import gamesim.GameStrategy.Strategy;
  *  @author DaJay42
  *  
  */
-public abstract class GameType {
+public abstract class GameRuleSet {
 	/**
 	 * @return "Reward": The pay-out awarded if both players chose C.
 	 */

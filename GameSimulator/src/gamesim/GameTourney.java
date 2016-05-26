@@ -1,5 +1,6 @@
 package gamesim;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 /**
@@ -8,12 +9,18 @@ import java.util.ArrayList;
  */
 public abstract class GameTourney {
 	public ArrayList<GamePlayer> players;
-	public GameType ruleset;
+	public GameRuleSet ruleset;
 	protected GameThread[] workers;
 	
-
+	@SuppressWarnings("unused")
+	private GameTourney() {
+		/*skip*/
+	}
+	protected GameTourney(String[] args) {
+		/*skip*/
+	}
 	
-	void resetPlayers() throws InstantiationException, IllegalAccessException{
+	protected void resetPlayers() throws InstantiationException, IllegalAccessException{
 		for(GamePlayer player : players){
 			if(player != null)
 				player.reset();
@@ -28,11 +35,11 @@ public abstract class GameTourney {
 	
 	public abstract int getNumPlayers();
 	
-	public abstract GameThread[] getNextMatchUp();
+	public abstract GameThread[] getNextMatchUp() throws IllegalArgumentException, InvocationTargetException, InstantiationException, IllegalAccessException;
 
 	public abstract void evaluate(GameThread[] workers);
 
 	public abstract void setup();
 	
-	public abstract String[] printResults();
+	public abstract String[][] printResults();
 }

@@ -1,13 +1,13 @@
 package gamesim.gamerules;
 
-import gamesim.GameType;
+import gamesim.GameRuleSet;
 
 /**A Prisoners' Dilemma GameType with the pay-outs as seen in Axelrod's tournaments.
- * T > R > P > S and 2*R = T + P 
+ * T > R > P > S and 2*R = T + P
  * @author DaJay42
  *
  */
-public class AxelrodPrisoners extends GameType {
+public class AxelrodPrisoners extends GameRuleSet {
 
 	@Override
 	public int R() {

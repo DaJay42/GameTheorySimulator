@@ -2,13 +2,11 @@ package gamesim.strategies;
 
 import gamesim.GameStrategy;
 
-/**A strategy by Leslie Downing, as seen in Axelrod's first tournament.
- * A rather complex strategy that tries to estimate the behavior of the opponent
- * based on their answers.
+/**A modification of the Downing strategy, that plays C the first two rounds.
  * @author DaJay42
- *
+ * @see Downing
  */
-public class Downing implements GameStrategy {
+public class CDowning implements GameStrategy {
 
 	int cForC;
 	int dForC;
@@ -25,7 +23,7 @@ public class Downing implements GameStrategy {
 	
 	@Override
 	public Strategy first() {
-		last = Strategy.D;
+		last = Strategy.C;
 		return last;
 	}
 
@@ -34,7 +32,7 @@ public class Downing implements GameStrategy {
 		if(second){
 			second = false;
 			prelast = last;
-			last = Strategy.D;
+			last = Strategy.C;
 			return last;
 		}
 		if(Answer == Strategy.D){

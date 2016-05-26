@@ -14,16 +14,16 @@ public class RoundRobinDecay extends RoundRobinFixed {
 
 	double w = 0.9975;
 	
-	
 	/**
 	 * @param median The median of the distribution of the number of rounds each game.
 	 */
-	public RoundRobinDecay(int median) {
-		super(median);
-		
-		w = 1 - Math.log(2)/median;
-	}
+	public RoundRobinDecay(String...args) {
+		super(args);
 
+		if(args != null && args.length > 0)
+			w = 1 - Math.log(2)/Integer.parseInt(args[0]);
+	}
+	
 	@Override
 	public int getRoundsPerGame(){
 		int i;
@@ -36,6 +36,6 @@ public class RoundRobinDecay extends RoundRobinFixed {
 
 	@Override
 	public String getRoundsDescriptor() {
-		return "rounds (median)";
+		return gamerounds +  " rounds (median)";
 	}
 }

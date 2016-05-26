@@ -9,7 +9,7 @@ import gamesim.GameStrategy.Strategy;
  *
  */
 public class GameThread {
-	GameType rules;
+	GameRuleSet rules;
 	public GamePlayer A;
 	public GamePlayer B;
 	int rounds;
@@ -21,7 +21,7 @@ public class GameThread {
 	 * @param p2 Player 2
 	 * @param length How many rounds?
 	 */
-	public GameThread(GameType type, GamePlayer p1, GamePlayer p2, int length){
+	public GameThread(GameRuleSet type, GamePlayer p1, GamePlayer p2, int length){
 		rules = type;
 		A = p1;
 		B = p2;

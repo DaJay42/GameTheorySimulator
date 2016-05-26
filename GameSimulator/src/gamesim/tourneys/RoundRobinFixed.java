@@ -23,8 +23,11 @@ public class RoundRobinFixed extends GameTourney {
 	GameThread[][] allMatchups;
 	
 	
-	public RoundRobinFixed(int rounds) {
-		gamerounds = rounds;
+	
+	public RoundRobinFixed(String...args) {
+		super(args);
+		if(args != null && args.length > 0)
+			gamerounds = Integer.parseInt(args[0]);
 	}
 	
 	public void setup() {
@@ -73,7 +76,7 @@ public class RoundRobinFixed extends GameTourney {
 	}
 
 	@Override
-	public String[] printResults() {
+	public String[][] printResults() {
 		ArrayList<ScoreTuple<GamePlayer>> ranking = new ArrayList<ScoreTuple<GamePlayer>>();
 		for(GamePlayer player : players){
 			if(player != null){
@@ -86,28 +89,27 @@ public class RoundRobinFixed extends GameTourney {
 		}
 		Collections.sort(ranking);
 		
-		String[] text = new String[playercount*2+2];
-		
-		for(int k = 0; k < text.length; k++){
-			if(k < playercount){
-				int i = k;
-				text[k] = i + ": ";
+		String[][] text = new String[3][];
+
+		text[0]= new String[playercount];
+		for(int i = 0; i < playercount; i++){
+				text[0][i] = i + "\t";
 				int total = 0;
 				for(int j = 0; j < playercount; j++){
-					text [k] = text[k] + results[i][j] + ", ";
+					text[0][i] = text[0][i] + results[i][j] + "\t";
 					total += results[i][j];
 				}
-				text[k] = text[k] + "Total: " + total;
-				
-			}else if(k == playercount){
-				text[k] = "-----";
-			}else if(k == playercount + 1){
-				text[k] = "##  (avg) :Name:";
-			}else if(k >= playercount + 2){
-				int i = k-playercount-2;
-				ScoreTuple<GamePlayer> p = ranking.get(i);
-				text[k] = "#"+(i+1) + ": (" +(int)(p.getScore()/(float)playercount) +") "+ p.getPayload().name;
-			}
+				text[0][i] = text[0][i] + "Total:\t" + total;
+		}
+		
+		text[1] = new String[2];
+		text[1][0] = "-----";
+		text[1][1] = "##\t(avg)\t:Name:";
+		
+		text[2] = new String[playercount];
+		for(int i = 0; i < playercount; i++){
+			ScoreTuple<GamePlayer> p = ranking.get(i);
+			text[2][i] = "#"+(i+1) + "\t(" +(int)(p.getScore()/(float)playercount) +")\t"+ p.getPayload().name;
 		}
 		
 		return text;
@@ -125,7 +127,7 @@ public class RoundRobinFixed extends GameTourney {
 
 	@Override
 	public String getRoundsDescriptor() {
-		return "rounds";
+		return gamerounds + " rounds";
 	}
 
 	@Override

@@ -1,13 +1,13 @@
 package gamesim.gamerules;
 
-import gamesim.GameType;
+import gamesim.GameRuleSet;
 
 /**A GameType modeled after Golden Balls.
  * T > R > P = S
  * @author DaJay42
  *
  */
-public class GoldenBalls extends GameType {
+public class GoldenBalls extends GameRuleSet {
 
 	@Override
 	public int R() {

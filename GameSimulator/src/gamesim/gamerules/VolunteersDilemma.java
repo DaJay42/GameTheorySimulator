@@ -1,13 +1,13 @@
 package gamesim.gamerules;
 
-import gamesim.GameType;
+import gamesim.GameRuleSet;
 
 /**A GameType to simulate the production of public goods.
  * T > R = S > P
  * @author DaJay42
  *
  */
-public class VolunteersDilemma extends GameType {
+public class VolunteersDilemma extends GameRuleSet {
 
 	@Override
 	public int R() {
