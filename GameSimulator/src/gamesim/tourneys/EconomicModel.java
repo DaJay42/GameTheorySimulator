@@ -27,7 +27,6 @@ public class EconomicModel extends GameTourney {
 	int[][] playerHistory;
 	int turn = 0;
 	
-	
 	public EconomicModel(String...args) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException{
 		super(args);
 		if(args.length > 3)
@@ -68,14 +67,20 @@ public class EconomicModel extends GameTourney {
 	}
 
 	@Override
+	public void resetPlayers() throws InstantiationException, IllegalAccessException{
+		super.resetPlayers();
+		model.resetPlayers();
+	}
+	
+	@Override
 	public String getRoundsDescriptor() {
-		return generations + " generations of " + model.getClass().getSimpleName()+ " (with "+model.getRoundsDescriptor() +" each)";
+		return generations + " generations of " +model.getClass().getSimpleName()+ " (with "+model.getRoundsDescriptor() +" each)";
 	}
 
 	@Override
 	public GameThread[] getNextMatchUp() throws IllegalArgumentException, InvocationTargetException, InstantiationException, IllegalAccessException {
 		if(model.isFinished()){
-//			if(turn < 1){
+//			if(turn < 3){
 //				String[][] results;
 //				results = model.printResults();
 //				
@@ -96,12 +101,11 @@ public class EconomicModel extends GameTourney {
 			}
 			
 			try {
-				resetPlayers();
 				if(arg0 == null)
 					model = model.getClass().newInstance();
 				else{
 					for(Constructor<?> c : model.getClass().getConstructors()){
-						if(c.getParameterTypes().length == 1 && c.getParameterTypes()[0] == Integer.class){
+						if(c.getParameterTypes().length == 1 && c.getParameterTypes()[0] == String[].class){
 							Object[] o = {arg0};
 							this.model = (GameTourney) c.newInstance(o);
 							break;

@@ -2,20 +2,18 @@ package gamesim.strategies;
 
 import gamesim.GameStrategy;
 
-/**A relatively simple strategy devised by me, 2016.
- * Similar to Pavlov, but does not switch back to C on subsequent betrayals.
- * I'm not even sure why it does actually kind of  well.
+/**Same strategy as Switch, but friendly. (starts with C)
  * @author DaJay42
- *
+ * @see Switch
  */
-public class Switch implements GameStrategy {
+public class CSwitch implements GameStrategy {
 	
 	Strategy last = Strategy.C;
-	boolean cautious = false;
+	boolean cautious = true;
 
 	@Override
 	public Strategy first() {
-		return Strategy.D;
+		return Strategy.C;
 	}
 
 	@Override

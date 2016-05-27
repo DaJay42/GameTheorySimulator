@@ -20,7 +20,7 @@ public abstract class GameTourney {
 		/*skip*/
 	}
 	
-	protected void resetPlayers() throws InstantiationException, IllegalAccessException{
+	public void resetPlayers() throws InstantiationException, IllegalAccessException{
 		for(GamePlayer player : players){
 			if(player != null)
 				player.reset();

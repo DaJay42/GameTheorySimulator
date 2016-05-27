@@ -1,10 +1,14 @@
--r gamesim.gamerules.AxelrodPrisoners
--t gamesim.tourneys.EconomicModel
--a 50,
+-o	log.txt
+-r	gamesim.gamerules.AxelrodPrisoners
+-t	gamesim.tourneys.EconimicModel
+-a	80,
 	400,
 	gamesim.tourneys.RoundRobinDecay,
-	120
--s gamesim.strategies.FiftyFifty,
+	200
+-s	gamesim.strategies.FiftyFifty,
+	gamesim.strategies.AlwaysC,
+	gamesim.strategies.AlwaysD,
+	gamesim.strategies.Alternate,
 	gamesim.strategies.TitForTat,
 	gamesim.strategies.TitForTwoTat,
 	gamesim.strategies.Friedman,
@@ -14,4 +18,7 @@
 	gamesim.strategies.DTitForTat,
 	gamesim.strategies.CDowning,
 	gamesim.strategies.Switch,
-	gamesim.strategies.Panic
+	gamesim.strategies.Panic,
+	gamesim.strategies.Buddha,
+	gamesim.strategies.Grudge,
+	gamesim.strategies.CSwitch

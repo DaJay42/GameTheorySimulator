@@ -89,27 +89,37 @@ public class RoundRobinFixed extends GameTourney {
 		}
 		Collections.sort(ranking);
 		
-		String[][] text = new String[3][];
-
-		text[0]= new String[playercount];
+		String[][] text = new String[4][];
+		
+		text[0] = new String[1];
+		text[0][0] = "player";
 		for(int i = 0; i < playercount; i++){
-				text[0][i] = i + "\t";
-				int total = 0;
-				for(int j = 0; j < playercount; j++){
-					text[0][i] = text[0][i] + results[i][j] + "\t";
-					total += results[i][j];
-				}
-				text[0][i] = text[0][i] + "Total:\t" + total;
+			text[0][0] = text[0][0]+"\t"+i;
 		}
 		
-		text[1] = new String[2];
-		text[1][0] = "-----";
-		text[1][1] = "##\t(avg)\t:Name:";
+		text[1]= new String[playercount];
+		for(int i = 0; i < playercount; i++){
+				text[1][i] = i + "\t";
+				int total = 0;
+				for(int j = 0; j < playercount; j++){
+					text[1][i] = text[1][i] + results[i][j] + "\t";
+					total += results[i][j];
+				}
+				text[1][i] = text[1][i] + "Total:\t" + total;
+		}
 		
-		text[2] = new String[playercount];
+		text[2] = new String[3];
+		text[2][0] = "player";
+		for(int i = 0; i < playercount; i++){
+			text[2][0] = text[2][0]+"\t"+i;
+		}
+		text[2][1] = "-----";
+		text[2][2] = "##\t(avg)\t:Name:";
+		
+		text[3] = new String[playercount];
 		for(int i = 0; i < playercount; i++){
 			ScoreTuple<GamePlayer> p = ranking.get(i);
-			text[2][i] = "#"+(i+1) + "\t(" +(int)(p.getScore()/(float)playercount) +")\t"+ p.getPayload().name;
+			text[3][i] = "#"+(i+1) + "\t(" +(int)(p.getScore()/(float)(playercount-1)) +")\t"+ p.getPayload().name;
 		}
 		
 		return text;

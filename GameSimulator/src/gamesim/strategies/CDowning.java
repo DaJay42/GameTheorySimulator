@@ -2,7 +2,9 @@ package gamesim.strategies;
 
 import gamesim.GameStrategy;
 
-/**A modification of the Downing strategy, that plays C the first two rounds.
+/**A aggressively friendly modification of the Downing strategy.
+ * Plays C the first two rounds, and plays D only if both C and D are answered
+ * predominantly with D.
  * @author DaJay42
  * @see Downing
  */
@@ -51,13 +53,13 @@ public class CDowning implements GameStrategy {
 		
 		prelast = last;
 		
-		p1 = (cForC+dForC > 0) ? cForC/(float)(cForC+dForC) : 1;
+		p1 = (cForC+dForC > 0) ? cForC/(float)(cForC+dForC) : 0;
 		p2 = (cForD+dForD > 0) ? cForD/(float)(cForD+dForD) : 0;
 		
-		if(p1 < 0.5 || p2 > 0.5){
-			last = Strategy.D;
-		}else{
+		if(p1 > 0.5 || p2 > 0.5){
 			last = Strategy.C;
+		}else{
+			last = Strategy.D;
 		}
 		
 		return last;
