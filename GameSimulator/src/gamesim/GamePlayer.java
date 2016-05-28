@@ -1,31 +1,57 @@
 package gamesim;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+import gamesim.GameStrategy.Strategy;
+
 
 /**
  * @author DaJay42
  *
  */
-public class GamePlayer {
+public abstract class GamePlayer {
 	public int score;
 	public String name;
 	public GameStrategy myStrategy;
 	private Class<? extends GameStrategy> strategyType;
+	private String[] arg0 = {};
 	
-	public GamePlayer(Class<? extends GameStrategy> s) throws InstantiationException, IllegalAccessException{
+	public GamePlayer(Class<? extends GameStrategy> s, String...args) throws InstantiationException, IllegalAccessException{
 		strategyType = s;
 		name = strategyType.getSimpleName();
 		myStrategy = strategyType.newInstance();		
 		score = 0;
+		arg0 = args;
 	}
 	
-	public void reset() throws InstantiationException, IllegalAccessException{
+	public final void reset() throws InstantiationException, IllegalAccessException{
 		score = 0;
 		myStrategy = strategyType.newInstance();
 	}
 	
-	public GamePlayer duplicate() throws InstantiationException, IllegalAccessException{
-		GamePlayer p = new GamePlayer(strategyType);
+	public final GamePlayer duplicate() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		GamePlayer p = null;
+		Object[] o = new Object[]{strategyType, arg0};
+		for(Constructor<?> c : this.getClass().getConstructors()){
+			if(c.getParameterTypes().length == 2 && c.getParameterTypes()[1] == String[].class){
+				p = (GamePlayer) c.newInstance(o);
+				break;
+			}
+		}
+		if(p == null){
+			throw new InstantiationException(String.format("No suitable constructor found for class %s with args {%s, %s}", getClass().getName(), o[0].toString(), o[1].toString()));
+		}
 		return p;
 	}
 	
+	public Strategy first(){
+		return myStrategy.first();
+	}
+	
+	public Strategy next(Strategy answer){
+		return myStrategy.next(answer);
+	}
+	
+	public abstract String getName();
 }

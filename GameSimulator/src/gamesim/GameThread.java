@@ -3,12 +3,11 @@ package gamesim;
 import gamesim.GameStrategy.Strategy;
 
 /**Has two players play out a chosen number of rounds
- * of a chosen GameType. Does not actually provide multi-threading,
- * though it would be possible to implement.
+ * of a chosen GameType. Does actually provide multi-threading.
  * @author DaJay42
  *
  */
-public class GameThread {
+public class GameThread implements Runnable{
 	GameRuleSet rules;
 	public GamePlayer A;
 	public GamePlayer B;
@@ -34,8 +33,8 @@ public class GameThread {
 	public void run(){
 		Strategy l, r, t1, t2;
 		
-		l = A.myStrategy.first();		
-		r = B.myStrategy.first();
+		l = A.first();		
+		r = B.first();
 		
 		for(int i = 0; i < rounds; i++){
 			A.score += rules.eval(l, r);
@@ -44,8 +43,8 @@ public class GameThread {
 			t1 = l;
 			t2 = r;
 			
-			l = A.myStrategy.next(t2);
-			r = B.myStrategy.next(t1);
+			l = A.next(t2);
+			r = B.next(t1);
 		}
 	}
 	

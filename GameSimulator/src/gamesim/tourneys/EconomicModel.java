@@ -58,6 +58,12 @@ public class EconomicModel extends GameTourney {
 	
 	@Override
 	public boolean isFinished() {
+		for(int i = 0; i < playerHistory.length; i++){
+			if(playerHistory[i][turn] == internalPlayers){
+				GameMain.out.println("EconomicModel terminated after "+ turn + " Generations due to domineering strategy "+players.get(i).name+".");
+				return true;
+			}
+		}
 		return (generations - 1 == turn) && model.isFinished();
 	}
 
@@ -131,7 +137,9 @@ public class EconomicModel extends GameTourney {
 			GameMain.out.println("Generation "+(turn+1)+" of " + model.getClass().getSimpleName()
 					+ " over " + model.getRoundsDescriptor()
 					+ " with rules "+ model.ruleset.getClass().getSimpleName()
-					+ " and " + model.getNumPlayers() + " players.");
+					+ " between " + model.getNumPlayers()
+					+ " " + model.players.get(0).getName()
+					+ ".");
 		}
 
 		return model.getNextMatchUp();
@@ -173,7 +181,9 @@ public class EconomicModel extends GameTourney {
 		GameMain.out.println("Generation 1 of " + model.getClass().getSimpleName()
 				+ " over " + model.getRoundsDescriptor()
 				+ " with rules "+ model.ruleset.getClass().getSimpleName()
-				+ " and " + model.getNumPlayers() + " players.");
+				+ " between " + model.getNumPlayers()
+				+ " " + model.players.get(0).getName()
+				+ ".");
 		
 	}
 
@@ -183,7 +193,7 @@ public class EconomicModel extends GameTourney {
 		ArrayList<ScoreTuple<GamePlayer>> ranking = new ArrayList<ScoreTuple<GamePlayer>>();
 		for(int i = 0; i < playercount; i++){
 			if(players.get(i) != null){
-				ranking.add(new ScoreTuple<GamePlayer>(playerHistory[i][generations-1], players.get(i)));
+				ranking.add(new ScoreTuple<GamePlayer>(playerHistory[i][turn], players.get(i)));
 			}
 		}
 		Collections.sort(ranking);
@@ -196,7 +206,7 @@ public class EconomicModel extends GameTourney {
 					text[0][i] = players.get(i).name + "        \t";
 				else
 					text[0][i] = players.get(i).name + "\t";
-				for(int j = 0; j < generations; j++){
+				for(int j = 0; j < turn + 1; j++){
 					text[0][i] = text[0][i] + playerHistory[i][j] + "\t";
 				}
 		}

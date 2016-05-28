@@ -1,24 +1,28 @@
--o	log.txt
--r	gamesim.gamerules.AxelrodPrisoners
--t	gamesim.tourneys.EconimicModel
--a	80,
-	400,
-	gamesim.tourneys.RoundRobinDecay,
+-r
+	gamesim.gamerules.AxelrodPrisoners
+-p
+	gamesim.players.PlayerReliable
+-t
+	gamesim.tourneys.EconomicModel
+	40
+	400
+	gamesim.tourneys.RoundRobinDecay
 	200
--s	gamesim.strategies.FiftyFifty,
-	gamesim.strategies.AlwaysC,
-	gamesim.strategies.AlwaysD,
-	gamesim.strategies.Alternate,
-	gamesim.strategies.TitForTat,
-	gamesim.strategies.TitForTwoTat,
-	gamesim.strategies.Friedman,
-	gamesim.strategies.Downing,
-	gamesim.strategies.Joss,
-	gamesim.strategies.Pavlov,
-	gamesim.strategies.DTitForTat,
-	gamesim.strategies.CDowning,
-	gamesim.strategies.Switch,
-	gamesim.strategies.Panic,
-	gamesim.strategies.Buddha,
-	gamesim.strategies.Grudge,
+-s
+	gamesim.strategies.FiftyFifty
+	gamesim.strategies.AlwaysC
+	gamesim.strategies.AlwaysD
+	gamesim.strategies.Alternate
+	gamesim.strategies.TitForTat
+	gamesim.strategies.TitForTwoTat
+	gamesim.strategies.Friedman
+	gamesim.strategies.Downing
+	gamesim.strategies.Joss
+	gamesim.strategies.Pavlov
+	gamesim.strategies.DTitForTat
+	gamesim.strategies.CDowning
+	gamesim.strategies.Switch
+	gamesim.strategies.Panic
+	gamesim.strategies.Buddha
+	gamesim.strategies.Grudge
 	gamesim.strategies.CSwitch

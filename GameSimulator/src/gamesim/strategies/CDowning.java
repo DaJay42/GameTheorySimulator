@@ -2,7 +2,7 @@ package gamesim.strategies;
 
 import gamesim.GameStrategy;
 
-/**A aggressively friendly modification of the Downing strategy.
+/**An aggressively friendly modification of the Downing strategy, by me.
  * Plays C the first two rounds, and plays D only if both C and D are answered
  * predominantly with D.
  * @author DaJay42
@@ -30,14 +30,14 @@ public class CDowning implements GameStrategy {
 	}
 
 	@Override
-	public Strategy next(Strategy Answer) {
+	public Strategy next(Strategy answer) {
 		if(second){
 			second = false;
 			prelast = last;
 			last = Strategy.C;
 			return last;
 		}
-		if(Answer == Strategy.D){
+		if(answer == Strategy.D){
 			if(prelast == Strategy.D){
 				dForD++;
 			}else{

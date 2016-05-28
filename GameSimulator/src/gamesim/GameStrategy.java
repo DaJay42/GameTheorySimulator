@@ -11,7 +11,12 @@ public interface GameStrategy {
 	 * The two options you have every round.
 	 * 'C'ooperate, or 'D'efect.
 	 */
-	public static enum Strategy {C, D};
+	public static enum Strategy{
+		C, D;
+		public Strategy invert(){
+			return (this == C) ? D : C;
+		}
+	}
 	
 	/**
 	 * Called in the first round.
@@ -22,7 +27,7 @@ public interface GameStrategy {
 	/**
 	 * Called in subsequent rounds.
 	 * Choose a Strategy to continue the game with.
-	 * @param Answer The Strategy your opponent used last round.
+	 * @param answer The Strategy your opponent used last round.
 	 */
-	public abstract Strategy next(Strategy Answer);
+	public abstract Strategy next(Strategy answer);
 }
