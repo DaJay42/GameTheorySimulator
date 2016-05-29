@@ -6,7 +6,9 @@ import java.lang.reflect.InvocationTargetException;
 import gamesim.GameStrategy.Strategy;
 
 
-/**
+/**Model of a player operating with a given strategy.
+ *<br>Takes one Class(? extends GameStrategy) to instantiate its strategy from.
+ *<br>Subclasses may also take further parameters, passed as String.
  * @author DaJay42
  *
  */
@@ -16,6 +18,9 @@ public abstract class GamePlayer {
 	public GameStrategy myStrategy;
 	private Class<? extends GameStrategy> strategyType;
 	private String[] arg0 = {};
+	
+	@SuppressWarnings("unused")
+	private GamePlayer(){}
 	
 	public GamePlayer(Class<? extends GameStrategy> s, String...args) throws InstantiationException, IllegalAccessException{
 		strategyType = s;
@@ -45,13 +50,9 @@ public abstract class GamePlayer {
 		return p;
 	}
 	
-	public Strategy first(){
-		return myStrategy.first();
-	}
+	public abstract Strategy first();
 	
-	public Strategy next(Strategy answer){
-		return myStrategy.next(answer);
-	}
+	public abstract Strategy next(Strategy answer);
 	
 	public abstract String getName();
 }

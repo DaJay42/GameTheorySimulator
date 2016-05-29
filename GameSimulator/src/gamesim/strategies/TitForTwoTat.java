@@ -3,7 +3,7 @@ package gamesim.strategies;
 import gamesim.GameStrategy;
 
 /**The Tit-for-Two-Tat Strategy, as by J. Maynard Smith, seen in Axelrod's second Tournament.
- * Starts with C, and only responds with D if it receives two Ds in a row.
+ *<br>Starts with C, and only responds with D if it receives two Ds in a row.
  * @author DaJay42
  *
  */

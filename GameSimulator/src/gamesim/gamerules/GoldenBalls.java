@@ -3,7 +3,8 @@ package gamesim.gamerules;
 import gamesim.GameRuleSet;
 
 /**A GameType modeled after Golden Balls.
- * T > R > P = S
+ * 
+ *<p>T > R > P = S
  * @author DaJay42
  *
  */

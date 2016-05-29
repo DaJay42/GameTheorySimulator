@@ -3,7 +3,8 @@ package gamesim.gamerules;
 import gamesim.GameRuleSet;
 
 /**A Prisoners' Dilemma GameType with the pay-outs as seen in Axelrod's tournaments.
- * T > R > P > S and 2*R = T + P
+ *
+ *<p>T > R > P > S and 2*R = T + P
  * @author DaJay42
  *
  */

@@ -3,7 +3,7 @@ package gamesim.strategies;
 import gamesim.GameStrategy;
 
 /**A Friedman-like Strategy, which forgives the first two defections.
- * The third defection, however, is rewarded with eternal damnation.
+ *<br>The third defection, however, is rewarded with eternal damnation.
  * @author DaJay42
  * @see Friedman
  */

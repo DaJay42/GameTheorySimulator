@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 /**GameSim execution model.
- * 
+ *<br>Will use parallelism if DO_THREADING in GameMain is set.
  * @author DaJay42
  */
 public class GameRunner{
@@ -15,7 +15,7 @@ public class GameRunner{
 	GameThread[] workers;
 	ArrayList<Class<? extends GameStrategy>> strats;
 	String[][] results;
-//	ExecutorService pool;
+	ExecutorService pool;
 	
 	
 	public GameRunner(Class<? extends GameRuleSet> rules, Class<? extends GamePlayer> player, String[] playerArgs, ArrayList<Class<? extends GameStrategy>> strategies, Class<? extends GameTourney> tourney, String...tourneyArgs) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{		
@@ -51,7 +51,8 @@ public class GameRunner{
 			Tournament.players.add((GamePlayer) playerCon.newInstance(new Object[]{s, playerArgs}));
 		}
 		
-//		pool = Executors.newFixedThreadPool(8);
+		if(GameMain.DO_THREADING)
+			pool = Executors.newCachedThreadPool();
 	}
 	
 	public void run() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ExecutionException, InterruptedException{
@@ -79,22 +80,29 @@ public class GameRunner{
 		
 		while(!Tournament.isFinished()){
 			workers = Tournament.getNextMatchUp();
-			
-//			ArrayList<Callable<Object>> workList = new ArrayList<Callable<Object>>();
-//			List<Future<Object>> futureList;
-//			
-			for(GameThread worker : workers){
-				if(worker != null){
-					worker.run();
-//					workList.add(Executors.callable(worker));
+
+			if(GameMain.DO_THREADING){
+				ArrayList<Callable<Object>> workList = new ArrayList<Callable<Object>>();
+				List<Future<Object>> futureList;
+				
+				for(GameThread worker : workers){
+					if(worker != null){
+						workList.add(Executors.callable(worker));
+					}
+				}
+				
+				futureList = pool.invokeAll(workList);
+				
+				for(Future<Object> f : futureList){
+					f.get();
+				}
+			}else{
+				for(GameThread worker : workers){
+					if(worker != null){
+						worker.run();
+					}
 				}
 			}
-//			futureList = pool.invokeAll(workList);
-			
-//			for(Future<Object> f : futureList){
-//				f.get();
-//			}
-			
 			Tournament.evaluate(workers);
 			Tournament.resetPlayers();
 		}

@@ -3,7 +3,7 @@ package gamesim;
 import gamesim.GameStrategy.Strategy;
 
 /** Defines the pay-out matrix to be used in evaluating players' actions.
- * It is suggested to use small ints to prevent overflows.
+ *<br>It is suggested to use small ints to prevent overflows.
  *  @author DaJay42
  *  
  */
@@ -23,7 +23,7 @@ public abstract class GameRuleSet {
 	 */
 	public abstract int T();
 	/**
-	 * @return "Punishment": The pay-out awarded if both players chose C.
+	 * @return "Punishment": The pay-out awarded if both players chose D.
 	 */
 	public abstract int P();
 	
@@ -52,7 +52,7 @@ public abstract class GameRuleSet {
 		}
 		
 		//failsafe. should never be reached.
-		//...but then that's what they always say.
+		//...but then, that's what they always say.
 		return Integer.MIN_VALUE;
 	}
 	

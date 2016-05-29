@@ -8,9 +8,14 @@ import gamesim.GameThread;
 import gamesim.GameTourney;
 import gamesim.util.ScoreTuple;
 
-/**Round Robin Tournament, with fixed, chosen number of rounds (default 200).
- * Everyone plays against everyone else once.
- * As played in Axelrod's first tournament.
+/**Round Robin Tournament, with fixed, chosen number of rounds (default: 200).
+ *<br>Everyone plays against everyone else once.
+ *<br>As played in Axelrod's first tournament.
+ * 
+ *<p>Takes one integer number as first String parameter.
+ *<br>All subsequent arguments are ignored.
+ * 
+ * @param median : int. The number of rounds each game.
  * @author DaJay42
  *
  */

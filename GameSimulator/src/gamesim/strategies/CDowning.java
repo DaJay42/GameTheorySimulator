@@ -2,8 +2,8 @@ package gamesim.strategies;
 
 import gamesim.GameStrategy;
 
-/**An aggressively friendly modification of the Downing strategy, by me.
- * Plays C the first two rounds, and plays D only if both C and D are answered
+/**An aggressively-friendly modification of the Downing strategy, by me.
+ *<br>Plays C the first two rounds, and plays D only if both C and D are answered
  * predominantly with D.
  * @author DaJay42
  * @see Downing

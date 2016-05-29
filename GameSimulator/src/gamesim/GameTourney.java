@@ -3,7 +3,8 @@ package gamesim;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
-/**
+/**Model of the Tournament players will play in.
+ *<br>Takes String... arguments, the semantics of which are to be determined by subclasses.
  * @author DaJay42
  *
  */

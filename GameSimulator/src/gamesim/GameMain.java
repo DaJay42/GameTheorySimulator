@@ -13,47 +13,50 @@ import gamesim.players.*;
 
 /**
  * Main Object. Everything starts here.
+ * <p>
  * All main parameters have the format '-x'.
- * All parameters are optional.
- * All parameters are order-independent,
+ *<br>All parameters are optional.
+ *<br>All parameters are order-independent,
  * however it is recommended to pass '-o' first and '-i' last.
- * Lists of arguments are separated by simple spaces,
+ *<br>Lists of arguments are separated by simple spaces,
  * and terminated by the next '-x' parameter.
  * 
  * @param t : Full class name of the GameTourney to be played,
- * followed by a list of (String) arguments to be passed to it.
- * See the respective class for supported arguments.
- * If specified multiple times, last passed wins.
- * Default: gamesim.tourneys.EconomicModel {empty list}.
- * 
+ * <br>followed by a list of (String) arguments to be passed to it.
+ * <br>See the respective class for supported arguments.
+ * <br>If specified multiple times, last passed wins.
+ * <br>Default: gamesim.tourneys.EconomicModel {empty list}.
+ * <p>
  * @param r : Full class name of the GameRuleSet to follow.
- * If specified multiple times, last passed wins.
- * Default: gamesim.gamerules.AxelrodPrisoners
- * 
+ * <br>If specified multiple times, last passed wins.
+ * <br>Default: gamesim.gamerules.AxelrodPrisoners
+ * <p>
  * @param s : List of the full class names
- * of the GameStrategies that will participate.
- * If specified multiple times, the lists will be appended.
- * Default: (see defaultStrategies)
- * 
+ * <br>of the GameStrategies that will participate.
+ * <br>If specified multiple times, the lists will be appended.
+ * <br>Default: (see defaultStrategies)
+ * <p>
  * @param p : Full class name of the GamePlayer to model,
- * followed by a list of (String) arguments to be passed to it.
- * See the respective class for supported arguments.
- * If specified multiple times, last passed wins.
- * Default: gamesim.GamePlayer {empty list}.
- * 
+ * <br>followed by a list of (String) arguments to be passed to it.
+ * <br>See the respective class for supported arguments.
+ * <br>If specified multiple times, last passed wins.
+ * <br>Default: gamesim.GamePlayer {empty list}.
+ * <p>
  * @param o : Path to a file, to which results will be printed.
- * If specified multiple times, last passed wins.
- * If not specified, System.out will be used instead.
- * 
+ * <br>If specified multiple times, last passed wins.
+ * <br>If not specified, System.out will be used instead.
+ * <p>
  * @param i : Path to a file from which to read more arguments.
- * All whitespace (\r, \n, \t and space) are valid separators.
- * All arguments will be appended to the current list.
- * If specified multiple times (e.g. in the file(s)), the evaluation will be chained.
+ * <br>All whitespace (\r, \n, \t and space) are valid separators.
+ * <br>All arguments will be appended to the current list.
+ * <br>If specified multiple times (e.g. in the file(s)), the evaluation will be chained.
  * 
  * @author DaJay42
  */
 public class GameMain {
 	
+	/**Set flag to use multithreading. Current results show that the overhead is not worth it.*/
+	public static final boolean DO_THREADING = false;
 	
 	public static PrintStream out = System.out;
 	
@@ -109,7 +112,7 @@ public class GameMain {
 						}
 						
 					}catch(Exception e){
-						out.printf("Warning: invalid argument '%s' passed to '-t', ignoring...\n", lArgs.get(i));
+						out.printf("Error: invalid argument '%s' passed to '-t', ignoring...\n", lArgs.get(i));
 					}
 					break;
 				case "-r":
@@ -118,7 +121,7 @@ public class GameMain {
 						ruleSet = Class.forName(lArgs.get(i)).asSubclass(GameRuleSet.class);
 						out.printf("Set ruleset to '%s'.\n", lArgs.get(i));
 					}catch(Exception e){
-						out.printf("Warning: invalid class '%s' passed to '-r', ignoring...\n", lArgs.get(i));
+						out.printf("Error: invalid class '%s' passed to '-r', ignoring...\n", lArgs.get(i));
 					}
 					break;
 				case "-p":
@@ -134,7 +137,7 @@ public class GameMain {
 							out.printf("Added pArg '%s'.\n", lArgs.get(i));
 						}
 					}catch(Exception e){
-						out.printf("Warning: invalid argument '%s' passed to '-p', ignoring...\n", lArgs.get(i));
+						out.printf("Error: invalid argument '%s' passed to '-p', ignoring...\n", lArgs.get(i));
 					}
 					break;
 				case "-s":
@@ -144,7 +147,7 @@ public class GameMain {
 							listStrategies.add(Class.forName(lArgs.get(i)).asSubclass(GameStrategy.class));
 							out.printf("Added strategy '%s'.\n", lArgs.get(i));
 						}catch(Exception e){
-							out.printf("Warning: invalid class '%s' passed to '-s', ignoring...\n", lArgs.get(i));
+							out.printf("Error: invalid class '%s' passed to '-s', ignoring...\n", lArgs.get(i));
 						}
 					}
 					break;
@@ -161,7 +164,7 @@ public class GameMain {
 						}
 						out.printf("GameTheorySimulator: Queueing arguments from '%s'.\n", lArgs.get(i));
 					}catch(Exception e){
-						out.printf("Warning: invalid file '%s' passed to '-i', ignoring...\n", lArgs.get(i));
+						out.printf("Error: invalid file '%s' passed to '-i', ignoring...\n", lArgs.get(i));
 					}
 				break;
 				case "-o":
@@ -175,12 +178,12 @@ public class GameMain {
 						out = new PrintStream(Files.newOutputStream(p),true);
 						out.printf("GameTheorySimulator: redirecting output to '%s'\n",lArgs.get(i));
 					} catch (Exception e) {
-						out.printf("Warning: could not create file '%s' passed to '-o', ignoring...\n", lArgs.get(i));
+						out.printf("Error: could not create file '%s' passed to '-o', ignoring...\n", lArgs.get(i));
 						
 					}
 					break;
 				default:
-					out.printf("Info: unexpected argument '%s', ignoring...\n", lArgs.get(i));
+					out.printf("Warning: unexpected argument '%s', ignoring...\n", lArgs.get(i));
 					break;
 				}
 			}

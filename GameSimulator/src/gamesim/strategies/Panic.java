@@ -3,8 +3,8 @@ package gamesim.strategies;
 import gamesim.GameStrategy;
 
 /**A opportunistic variant of TFT, by me, 2016. Plays D until it receives D.
- * If so, plays C twice ("apology") then switches to TFT.
- * Surprisingly does quite well in single tournaments. Does however badly in meta-tournaments.
+ *<br>If so, plays C twice ("apology") then switches to TFT.
+ *<br>Surprisingly does quite well in single tournaments and tournaments with faulty players.
  * @see TitForThat
  * @author DaJay42
  *

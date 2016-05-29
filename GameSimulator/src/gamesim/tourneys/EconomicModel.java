@@ -11,7 +11,20 @@ import gamesim.GameThread;
 import gamesim.GameTourney;
 import gamesim.util.ScoreTuple;
 
-/**TODO
+/**A meta-tournament that runs several generations (default: 50) of an internal tournament model (default: gamesim.tourneys.RoundRobinDecay).
+ * <p>
+ * In the first generation, all players are represented once.
+ * In every subsequent generation, the internal players (default: 400)
+ * are distributed to strategies according to the total points achieved
+ * by the players using that strategy in the previous generation.
+ * 
+ *<p>Takes two integer number as first and second String parameter.
+ *<br>Takes one full class name as third String parameter.
+ *<br>All subsequent arguments are forwarded to the internal model.
+ * 
+ * @param generations : int. The number of time the model is run game
+ * @param internalPlayers : int. The maximum number of players each run of the model has.
+ * @param modelClass : Class<? extends GameTourney>. The internal tournament model to use. 
  * @author DaJay42
  *
  */

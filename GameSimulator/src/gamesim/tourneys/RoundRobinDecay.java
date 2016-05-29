@@ -3,9 +3,14 @@ package gamesim.tourneys;
 import gamesim.tourneys.RoundRobinFixed;
 
 /**Round Robin Tournament, but with a random number of rounds.
- * The number of rounds is exponential-decay-distributed,
- * and can have a chosen median (default 200).
- * As played in Axelrod's second tournament.
+ *<br>The number of rounds is exponential-decay-distributed,
+ * and can have a chosen median (default: 200).
+ *<br>As played in Axelrod's second tournament.
+ * 
+ *<p>Takes one integer number as first String parameter.
+ *<br>All subsequent arguments are ignored.
+ * 
+ * @param median : int. The median of the distribution of the number of rounds each game.
  * @author DaJay42
  *
  * @see RoundRobinFixed

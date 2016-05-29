@@ -3,7 +3,8 @@ package gamesim.gamerules;
 import gamesim.GameRuleSet;
 
 /**A GameType to simulate the production of public goods.
- * T > R = S > P
+ *
+ *<p>T > R = S > P
  * @author DaJay42
  *
  */

@@ -2,7 +2,7 @@ package gamesim.strategies;
 
 import gamesim.GameStrategy;
 
-/**A Strategy that returns whichever answer it has heard more often.
+/**A Strategy that returns whichever answer it has heard more often. Friendly.
  * @author DaJay42
  *
  */

@@ -3,8 +3,9 @@ package gamesim.strategies;
 import gamesim.GameStrategy;
 
 /**A strategy by Leslie Downing, as seen in Axelrod's first tournament.
- * A rather complex strategy that tries to estimate the behavior of the opponent
- * based on their answers.
+ *<br>A rather complex strategy that tries to estimate the behavior of the opponent
+ * based on their answers. Unfriendly.
+ * <p>Does surprisingly well in environments with very faulty players.
  * @author DaJay42
  *
  */

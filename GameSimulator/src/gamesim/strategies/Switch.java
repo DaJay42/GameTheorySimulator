@@ -3,8 +3,8 @@ package gamesim.strategies;
 import gamesim.GameStrategy;
 
 /**A relatively simple strategy devised by me, 2016.
- * Similar to Pavlov, but does not switch back to C on subsequent betrayals.
- * I'm not even sure why it does actually kind of  well.
+ *<br>Similar to Pavlov, but does not switch back to C on subsequent betrayals.
+ *<br>Sometimes performs okay.
  * @author DaJay42
  *
  */

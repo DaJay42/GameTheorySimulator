@@ -2,8 +2,8 @@ package gamesim;
 
 import gamesim.GameStrategy.Strategy;
 
-/**Has two players play out a chosen number of rounds
- * of a chosen GameType. Does actually provide multi-threading.
+/**Has two players play out a chosen number of rounds of a chosen GameType.
+ *<br>Can provide multi-threading, but that seems to produce too much overhead.
  * @author DaJay42
  *
  */
@@ -15,7 +15,7 @@ public class GameThread implements Runnable{
 	
 	
 	/**
-	 * @param type The GameType to play
+	 * @param type The GameType to play.
 	 * @param p1 Player 1
 	 * @param p2 Player 2
 	 * @param length How many rounds?
@@ -27,9 +27,7 @@ public class GameThread implements Runnable{
 		rounds = length;
 	}
 	
-	/**Actually executes the games.
-	 * 
-	 */
+	/**Actually executes the games.*/
 	public void run(){
 		Strategy l, r, t1, t2;
 		

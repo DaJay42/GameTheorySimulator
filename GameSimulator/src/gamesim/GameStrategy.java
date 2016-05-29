@@ -2,17 +2,20 @@ package gamesim;
 
 /**
  * Implement this interface to create a Strategy.
- * Strategies MUST be constructed ONLY by the zero-argument constructor.
+ *<br>Strategies MUST be fully constructible by the zero-argument constructor,
+ * as only that will be called.
  * @author DaJay42
  */
 public interface GameStrategy {
 	
-	/**
-	 * The two options you have every round.
+	/**The two options possible have every round.
 	 * 'C'ooperate, or 'D'efect.
 	 */
 	public static enum Strategy{
-		C, D;
+		/**Cooperation*/C,
+		/**Defection*/D;
+		/**Turns C into D and vice-versa.
+		 * @return not this */
 		public Strategy invert(){
 			return (this == C) ? D : C;
 		}
@@ -20,14 +23,14 @@ public interface GameStrategy {
 	
 	/**
 	 * Called in the first round.
-	 * Choose a Strategy to start the game with.
+	 * Chooses a Strategy to start the game with.
 	 */
 	public abstract Strategy first();
 	
 	/**
 	 * Called in subsequent rounds.
-	 * Choose a Strategy to continue the game with.
-	 * @param answer The Strategy your opponent used last round.
+	 * Chooses a Strategy to continue the game with.
+	 * @param answer The Strategy the opponent used last round.
 	 */
 	public abstract Strategy next(Strategy answer);
 }

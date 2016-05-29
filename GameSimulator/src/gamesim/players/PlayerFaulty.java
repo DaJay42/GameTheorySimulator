@@ -4,6 +4,16 @@ import gamesim.GamePlayer;
 import gamesim.GameStrategy;
 import gamesim.GameStrategy.Strategy;
 
+/**A player that has a given chance to "accidentally" play
+ * the opposite move of what its GameStrategy would.
+ *
+ *<p>Takes one floating point number as first String parameter.
+ *<br>All subsequent arguments are ignored.
+ * 
+ * @param faultChance : double. Determines the likelihood of "accidents".
+ * @author DaJay42
+ *
+ */
 public class PlayerFaulty extends GamePlayer {
 
 	double faultChance = 0.05;

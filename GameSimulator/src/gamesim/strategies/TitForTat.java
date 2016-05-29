@@ -3,8 +3,8 @@ package gamesim.strategies;
 import gamesim.GameStrategy;
 
 /**The Tit-For-Tat Strategy, as by Anatol Rapoport, 1984 in Axelrod's first tournament.
- * Starts with C, then answers with whatever the opponent played.
- * Friendly, forgiving, non-exploitable and simple, it might just be the best know strategy.
+ *<br>Starts with C, then answers with whatever the opponent played.
+ *<br>Friendly, forgiving, non-exploitable and simple, it might just be the best know strategy.
  * @author DaJay42
  *
  */
