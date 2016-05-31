@@ -160,6 +160,7 @@ public class EconomicModel extends GameTourney {
 
 	@Override
 	public void evaluate(GameThread[] workers) {
+		model.evaluate(workers);
 		
 		for(GameThread worker : workers){
 			if(worker != null){
@@ -176,11 +177,10 @@ public class EconomicModel extends GameTourney {
 			}
 		}
 		
-		model.evaluate(workers);
 	}
 
 	@Override
-	public void setup() {
+	public void setup() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		playercount = players.size();
 		pointHistory = new double[playercount][generations];
 		playerHistory = new int[playercount][generations];
@@ -203,13 +203,7 @@ public class EconomicModel extends GameTourney {
 	@Override
 	public String[][] printResults() {
 		
-		ArrayList<ScoreTuple<GamePlayer>> ranking = new ArrayList<ScoreTuple<GamePlayer>>();
-		for(int i = 0; i < playercount; i++){
-			if(players.get(i) != null){
-				ranking.add(new ScoreTuple<GamePlayer>(playerHistory[i][turn], players.get(i)));
-			}
-		}
-		Collections.sort(ranking);
+		ArrayList<ScoreTuple<GamePlayer>> ranking = getRanking();
 		
 		String[][] text = new String[3][];
 		
@@ -240,6 +234,18 @@ public class EconomicModel extends GameTourney {
 	@Override
 	public int getNumPlayers() {
 		return playercount;
+	}
+
+	@Override
+	public ArrayList<ScoreTuple<GamePlayer>> getRanking() {
+		ArrayList<ScoreTuple<GamePlayer>> ranking = new ArrayList<ScoreTuple<GamePlayer>>();
+		for(int i = 0; i < playercount; i++){
+			if(players.get(i) != null){
+				ranking.add(new ScoreTuple<GamePlayer>(playerHistory[i][turn], players.get(i)));
+			}
+		}
+		Collections.sort(ranking);
+		return ranking;
 	}
 
 }

@@ -1,7 +1,10 @@
 package gamesim;
 
+import gamesim.util.ScoreTuple;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**Model of the Tournament players will play in.
  *<br>Takes String... arguments, the semantics of which are to be determined by subclasses.
@@ -40,7 +43,9 @@ public abstract class GameTourney {
 
 	public abstract void evaluate(GameThread[] workers);
 
-	public abstract void setup();
+	public abstract void setup() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 	
 	public abstract String[][] printResults();
+	
+	public abstract List<ScoreTuple<GamePlayer>> getRanking();
 }

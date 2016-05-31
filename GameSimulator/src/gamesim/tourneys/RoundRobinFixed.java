@@ -1,5 +1,6 @@
 package gamesim.tourneys;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -9,19 +10,20 @@ import gamesim.GameTourney;
 import gamesim.util.ScoreTuple;
 
 /**Round Robin Tournament, with fixed, chosen number of rounds (default: 200).
- *<br>Everyone plays against everyone else once.
+ *<br>Every player plays against everyone (including itself) once.
  *<br>As played in Axelrod's first tournament.
  * 
  *<p>Takes one integer number as first String parameter.
  *<br>All subsequent arguments are ignored.
  * 
- * @param median : int. The number of rounds each game.
+ * @param gamerounds : int. The number of rounds each game.
  * @author DaJay42
  *
  */
 public class RoundRobinFixed extends GameTourney {
 
 	int matchups;
+	int round = 0;
 	int playercount;
 	int gamerounds = 200;
 	int[][] results;
@@ -35,14 +37,14 @@ public class RoundRobinFixed extends GameTourney {
 			gamerounds = Integer.parseInt(args[0]);
 	}
 	
-	public void setup() {
+	public void setup() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		playercount = players.size();
 		if(playercount % 2 == 1)
 			players.add(null);
-		matchups = (players.size()-1);
+		matchups = (players.size());
 		int games = players.size()/2;
 		results = new int[playercount][playercount];
-		allMatchups = new GameThread[matchups][games];
+		allMatchups = new GameThread[matchups+2][games];
 		
 		for (int round = 0; round < matchups; round++) {
 	        for (int match = 0; match < games; match++) {
@@ -60,12 +62,23 @@ public class RoundRobinFixed extends GameTourney {
 	            }
 	        }
 	    }
-		
+		//play against self.
+		for(int i = 0; i < players.size()/2; i++){
+			if(players.get(i+players.size()/2) != null)
+				allMatchups[matchups][i] = new GameThread(ruleset, players.get(i), 
+					players.get(i).duplicate(), getRoundsPerGame());
+		}
+		for(int i = 0; i < players.size()/2; i++){
+			if(players.get(i+players.size()/2) != null)
+				allMatchups[matchups+1][i] = new GameThread(ruleset, players.get(i+players.size()/2), 
+        			players.get(i+players.size()/2).duplicate(), getRoundsPerGame());
+		}
+		matchups += 2;
 	}
 
 	@Override
 	public boolean isFinished() {
-		return matchups == 0;
+		return round == matchups;
 	}
 
 	@Override
@@ -75,24 +88,14 @@ public class RoundRobinFixed extends GameTourney {
 
 	@Override
 	public GameThread[] getNextMatchUp() {
-		matchups--;
-		workers = allMatchups[matchups];
+		workers = allMatchups[round];
+		round++;
 		return workers;
 	}
 
 	@Override
 	public String[][] printResults() {
-		ArrayList<ScoreTuple<GamePlayer>> ranking = new ArrayList<ScoreTuple<GamePlayer>>();
-		for(GamePlayer player : players){
-			if(player != null){
-				int total = 0;
-				for(int j = 0; j < playercount; j++){
-					total += results[players.indexOf(player)][j];
-				}
-				ranking.add(new ScoreTuple<GamePlayer>(total, player));
-			}
-		}
-		Collections.sort(ranking);
+		ArrayList<ScoreTuple<GamePlayer>> ranking = getRanking();
 		
 		String[][] text = new String[4][];
 		
@@ -124,7 +127,7 @@ public class RoundRobinFixed extends GameTourney {
 		text[3] = new String[playercount];
 		for(int i = 0; i < playercount; i++){
 			ScoreTuple<GamePlayer> p = ranking.get(i);
-			text[3][i] = "#"+(i+1) + "\t(" +(int)(p.getScore()/(float)(playercount-1)) +")\t"+ p.getPayload().name;
+			text[3][i] = "#"+(i+1) + "\t(" +p.getScore() +")\t"+ p.getPayload().name;
 		}
 		
 		return text;
@@ -132,6 +135,18 @@ public class RoundRobinFixed extends GameTourney {
 
 	@Override
 	public void evaluate(GameThread[] workers) {
+		//correct for playing against self.
+		if(round >= matchups-2){
+			for(GameThread worker : workers){
+				if(worker != null){
+					worker.A.score /= 2;
+					worker.B.score /= 2;
+					results[players.indexOf(worker.A)][players.indexOf(worker.A)] = worker.A.score + worker.B.score;
+				}
+			}
+			return;
+		}
+		
 		for(GameThread worker : workers){
 			if(worker != null){
 				results[players.indexOf(worker.A)][players.indexOf(worker.B)] += worker.A.score;
@@ -148,6 +163,22 @@ public class RoundRobinFixed extends GameTourney {
 	@Override
 	public int getNumPlayers() {
 		return playercount;
+	}
+
+	@Override
+	public ArrayList<ScoreTuple<GamePlayer>> getRanking() {
+		ArrayList<ScoreTuple<GamePlayer>> ranking = new ArrayList<ScoreTuple<GamePlayer>>();
+		for(GamePlayer player : players){
+			if(player != null){
+				int total = 0;
+				for(int j = 0; j < playercount; j++){
+					total += results[players.indexOf(player)][j];
+				}
+				ranking.add(new ScoreTuple<GamePlayer>((total/playercount), player));
+			}
+		}
+		Collections.sort(ranking);
+		return ranking;
 	}
 
 }
