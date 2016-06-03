@@ -2,7 +2,7 @@ package gamesim.strategies;
 
 import gamesim.GameStrategy;
 
-/**A Win-Stay-Lose-Shift Strategy. See Nowak and Sigmund.
+/**A Win-Stay-Lose-Shift Strategy. See Nowak and Sigmund, 1993.
  * @author DaJay42
  *
  */

@@ -1,13 +1,83 @@
--r
-	gamesim.gamerules.AxelrodPrisoners
--p
-	gamesim.players.PlayerReliable
--t
-	gamesim.tourneys.EconomicModel
-	40
+//This file serves as an example of how to use files to efficiently pass arguments to GameMain.
+//Parse it using "-i exampleArgs.txt"
+//It also contains examples and explanations for the various parameters, serving as a good entry point.
+
+//This is a comment. Comments start with "//" and last until the next line break (\n or \r).
+
+//Arguments are to be separated by {' '|'\t'|'\n'|'\r'}+
+//That is, any amount at least one of any mixture of spaces, tabs, line feeds and carriage returns.
+
+//The following parameters are supported:
+
+//'-i' specifies file(s) to read arguments from, like this one.
+// Several file names may be passed, and even chained recursively from inside a file.
+// However, loading the same file multiple times is not supported.
+
+//example:
+//-i exampleArgs.txt
+
+
+//'-o' specifies a file to write results to. Ideally passed as one of the first.
+//if not specified, will write to stdout.
+
+//example:
+//-o out.txt
+
+
+//'-y' skips all user prompts, answering 'y' every time.
+
+//example:
+-y
+
+
+//'-v' determines the verbosity of the output.
+//valid values:
+// 2 -> print everything
+// 1 -> do not print info
+// 0 -> do not print warnings & info
+// -1 -> do not print warnings & info, and redirect errors to stderr
+//default: 2
+
+//example:
+-v 2
+
+//'-r' defines the GameRuleSet to use. It takes one full class name, and ignores everything afterwards.
+//if not specified, 'gamesim.gamerules.AxelrodPrisoners' will be used as default.
+
+//example:
+-r gamesim.gamerules.AxelrodPrisoners
+
+
+//'-p' specifies the GamePlayer model used in the simulation. It takes one full class name,
+// and passes everything else to the constructor of the specified class.
+// What additional arguments are accepted depends on the class in question,
+// so please see their respective javaDocs for details.
+// If not specified, 'gamesim.players.PlayerReliable' will be used as default.
+
+//example:
+-p gamesim.players.PlayerFaulty
+	0.003
+	
+	
+//'-t' specifies the GameTourney model used in the simulation. It takes one full class name,
+// and passes everything else to the constructor of the specified class.
+// What additional arguments are accepted depends on the class in question,
+// so please see their respective javaDocs for details.
+// If not specified, 'gamesim.tourneys.EconomicModel' will be used as default.
+
+//example:
+-t gamesim.tourneys.EconomicModel
+	80
 	400
 	gamesim.tourneys.RoundRobinDecay
 	200
+	
+	
+//'-s' defines the list of GameStrategy that will participate in the tournament.
+// Each is specified by one full class name.
+//if not specified, the list 'defaultStrategies', as defined in GameMain, will be used as default.
+
+//example:
 -s
 	gamesim.strategies.FiftyFifty
 	gamesim.strategies.AlwaysC

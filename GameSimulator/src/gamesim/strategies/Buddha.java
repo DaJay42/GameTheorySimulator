@@ -2,8 +2,8 @@ package gamesim.strategies;
 
 import gamesim.GameStrategy;
 
-/**A Friedman-like Strategy, which forgives the first two defections.
- *<br>The third defection, however, is rewarded with eternal damnation.
+/**A Friedman-like Strategy, which forgives the first three defections.
+ *<br>The fourth defection, however, is rewarded with eternal damnation.
  * @author DaJay42
  * @see Friedman
  */
@@ -20,7 +20,7 @@ public class Buddha implements GameStrategy {
 	public Strategy next(Strategy Answer) {
 		if(Answer == Strategy.D)
 			slaps++;
-		return (slaps < 3) ? Strategy.C : Strategy.D;
+		return (slaps <= 3) ? Strategy.C : Strategy.D;
 	}
 
 }

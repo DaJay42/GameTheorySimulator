@@ -42,6 +42,6 @@ public class PlayerFaulty extends GamePlayer {
 
 	@Override
 	public String getName() {
-		return PlayerFaulty.class.getSimpleName() + " ("+100*faultChance+"% fault chance)";
+		return PlayerFaulty.class.getSimpleName() + " ("+100*faultChance+"%% fault chance)";
 	}
 }

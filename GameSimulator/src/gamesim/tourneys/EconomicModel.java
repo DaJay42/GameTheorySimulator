@@ -73,7 +73,7 @@ public class EconomicModel extends GameTourney {
 	public boolean isFinished() {
 		for(int i = 0; i < playerHistory.length; i++){
 			if(playerHistory[i][turn] == internalPlayers){
-				GameMain.out.println("EconomicModel terminated after "+ turn + " Generations due to domineering strategy "+players.get(i).name+".");
+				GameMain.printWarning("EconomicModel terminated after "+ turn + " Generations due to domineering strategy "+players.get(i).name+".");
 				return true;
 			}
 		}
@@ -147,7 +147,7 @@ public class EconomicModel extends GameTourney {
 
 			turn++;
 			
-			GameMain.out.println("Generation "+(turn+1)+" of " + model.getClass().getSimpleName()
+			GameMain.printInfo("Generation "+(turn+1)+" of " + model.getClass().getSimpleName()
 					+ " over " + model.getRoundsDescriptor()
 					+ " with rules "+ model.ruleset.getClass().getSimpleName()
 					+ " between " + model.getNumPlayers()
@@ -182,8 +182,8 @@ public class EconomicModel extends GameTourney {
 	@Override
 	public void setup() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		playercount = players.size();
-		pointHistory = new double[playercount][generations];
-		playerHistory = new int[playercount][generations];
+		pointHistory = new double[playercount][generations+1];
+		playerHistory = new int[playercount][generations+1];
 		for(int i = 0; i < playercount; i++){
 			playerHistory[i][0] = 1;
 		}
@@ -191,7 +191,7 @@ public class EconomicModel extends GameTourney {
 		model.ruleset = ruleset;
 		model.setup();
 		
-		GameMain.out.println("Generation 1 of " + model.getClass().getSimpleName()
+		GameMain.printInfo("Generation 1 of " + model.getClass().getSimpleName()
 				+ " over " + model.getRoundsDescriptor()
 				+ " with rules "+ model.ruleset.getClass().getSimpleName()
 				+ " between " + model.getNumPlayers()
@@ -202,17 +202,27 @@ public class EconomicModel extends GameTourney {
 
 	@Override
 	public String[][] printResults() {
+		double total = 0;
+		for(int i = 0; i < playercount; i++){
+			total += pointHistory[i][turn];
+		}
+		double scale = internalPlayers/total;
 		
+		for(int i = 0; i < playercount; i++){
+			playerHistory[i][turn+1] = (int)(scale*pointHistory[i][turn]);
+		}
+		turn++;
 		ArrayList<ScoreTuple<GamePlayer>> ranking = getRanking();
 		
 		String[][] text = new String[3][];
 		
 		text[0] = new String[playercount];
+		int max = 0;
 		for(int i = 0; i < playercount; i++){
-				if(players.get(i).name.length()<8)
-					text[0][i] = players.get(i).name + "        \t";
-				else
-					text[0][i] = players.get(i).name + "\t";
+			max = Math.max(max, players.get(i).name.length());
+		}
+		for(int i = 0; i < playercount; i++){
+				text[0][i] = String.format("%-"+max+"s\t", players.get(i).name);
 				for(int j = 0; j < turn + 1; j++){
 					text[0][i] = text[0][i] + playerHistory[i][j] + "\t";
 				}

@@ -57,7 +57,7 @@ public class GameRunner{
 	
 	public void run() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ExecutionException, InterruptedException{
 		
-		GameMain.out.println("Tournament " + Tournament.getClass().getSimpleName()
+		GameMain.printInfo("Tournament " + Tournament.getClass().getSimpleName()
 				+ " over " + Tournament.getRoundsDescriptor()
 				+ " with rules "+ Tournament.ruleset.getClass().getSimpleName()
 				+ " between " + strats.size()
@@ -72,9 +72,9 @@ public class GameRunner{
 				text = text + "\n";
 			}
 		}
-		GameMain.out.println(text);
+		GameMain.printInfo(text);
 
-		GameMain.out.println("-----");
+		GameMain.printInfo("-----");
 
 		Tournament.setup();
 		
@@ -108,13 +108,13 @@ public class GameRunner{
 		}
 		
 
-		GameMain.out.println("-----");
+		GameMain.printInfo("-----");
 		
 		results = Tournament.printResults();
 		
 		for(String[] result : results){
 			for(String line : result){
-				GameMain.out.println(line);
+				GameMain.printResult(line);
 			}
 		}
 	}

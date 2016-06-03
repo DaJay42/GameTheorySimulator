@@ -1,6 +1,6 @@
 package gamesim;
 
-import java.io.PrintStream;
+import java.io.*;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,12 +13,12 @@ import gamesim.players.*;
 
 /**
  * Main Object. Everything starts here.
- * <p>
- * All main parameters have the format '-x'.
+ * 
+ * <p>All main parameters have the format '-x'.
  *<br>All parameters are optional.
  *<br>All parameters are order-independent,
- * however it is recommended to pass '-o' first and '-i' last.
- *<br>Lists of arguments are separated by simple spaces,
+ * however it is recommended to pass '-v', '-o' and '-y' first, and '-i' last.
+ *<br>Lists of arguments are separated by whitespace,
  * and terminated by the next '-x' parameter.
  * 
  * @param t : Full class name of the GameTourney to be played,
@@ -58,10 +58,27 @@ public class GameMain {
 	/**Set flag to use multithreading. Current results show that the overhead is not worth it.*/
 	public static final boolean DO_THREADING = false;
 	
-	public static PrintStream out = System.out;
+	
+	/**  -1: results only (errors redirected to System.err)
+	 *<br>0: results and errors
+	 *<br>1: results, errors and warnings
+	 *<br>2: results, errors, warnings and info
+	 */
+	private static int verbosity = 2;
+	private final static int errors = 0;
+	private final static int warnings = 1;
+	private final static int infos = 2;
+	
+	private static boolean alwaysYes = false;
+	
+	private static PrintStream out = System.out;
+	
+	public static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	
 	public static void main(String[] args){
+		boolean err = false;
 		ArrayList<String> lArgs = new ArrayList<String>();
+		ArrayList<String> files = new ArrayList<String>();
 		for(String s : args)
 			lArgs.add(s);
 		
@@ -92,104 +109,156 @@ public class GameMain {
 			CDowning.class,
 			CSwitch.class,
 			Panic.class,
-			};
-		
-			for(int i = 0; i < lArgs.size(); i++){
-				switch(lArgs.get(i)){
-				case "-t":
-					try{
-						i++;
-						tourney = Class.forName(lArgs.get(i)).asSubclass(GameTourney.class);
-						out.printf("Set tournament to '%s'.\n", lArgs.get(i));
-						//default args are useless now
-						tourneyArgs = new String[0];
+		};
+	
+		for(int i = 0; i < lArgs.size(); i++){
+			switch(lArgs.get(i)){
+			case "-y":
+				i++;
+				alwaysYes = true;
+			case "-v":
+				i++;
+				try{
+					verbosity = Integer.parseInt(lArgs.get(i));
+				}catch(Exception e){
+					err = true;
+					printException("Error: invalid argument '%s' passed to '-v', skipping...", lArgs.get(i));
+				}
+				break;
+			case "-t":
+				try{
+					i++;
+					tourney = Class.forName(lArgs.get(i)).asSubclass(GameTourney.class);
+					printInfo("Set tournament to '%s'.", lArgs.get(i));
+					//default args are useless now
+					tourneyArgs = new String[0];
 
-						listTArgs = new ArrayList<String>();
-						while(i+1 < lArgs.size() && !lArgs.get(i+1).startsWith("-")){
-							i++;
-							listTArgs.add(lArgs.get(i));
-							out.printf("Added tArg '%s'.\n", lArgs.get(i));
-						}
-						
-					}catch(Exception e){
-						out.printf("Error: invalid argument '%s' passed to '-t', ignoring...\n", lArgs.get(i));
-					}
-					break;
-				case "-r":
-					try{
-						i++;
-						ruleSet = Class.forName(lArgs.get(i)).asSubclass(GameRuleSet.class);
-						out.printf("Set ruleset to '%s'.\n", lArgs.get(i));
-					}catch(Exception e){
-						out.printf("Error: invalid class '%s' passed to '-r', ignoring...\n", lArgs.get(i));
-					}
-					break;
-				case "-p":
-					try{
-						i++;
-						player = Class.forName(lArgs.get(i)).asSubclass(GamePlayer.class);
-						out.printf("Set player model to '%s'.\n", lArgs.get(i));
-						
-						listPArgs = new ArrayList<String>();
-						while(i+1 < lArgs.size() && !lArgs.get(i+1).startsWith("-")){
-							i++;
-							listPArgs.add(lArgs.get(i));
-							out.printf("Added pArg '%s'.\n", lArgs.get(i));
-						}
-					}catch(Exception e){
-						out.printf("Error: invalid argument '%s' passed to '-p', ignoring...\n", lArgs.get(i));
-					}
-					break;
-				case "-s":
+					listTArgs = new ArrayList<String>();
 					while(i+1 < lArgs.size() && !lArgs.get(i+1).startsWith("-")){
 						i++;
-						try{
-							listStrategies.add(Class.forName(lArgs.get(i)).asSubclass(GameStrategy.class));
-							out.printf("Added strategy '%s'.\n", lArgs.get(i));
-						}catch(Exception e){
-							out.printf("Error: invalid class '%s' passed to '-s', ignoring...\n", lArgs.get(i));
-						}
+						listTArgs.add(lArgs.get(i));
+						printInfo("Added tArg '%s'.", lArgs.get(i));
 					}
-					break;
-				case "-i":
-					try{
+					
+				}catch(Exception e){
+					err = true;
+					printException("Error: invalid argument '%s' passed to '-t', skipping...", lArgs.get(i));
+				}
+				break;
+			case "-r":
+				try{
+					i++;
+					ruleSet = Class.forName(lArgs.get(i)).asSubclass(GameRuleSet.class);
+					printInfo("Set ruleset to '%s'.", lArgs.get(i));
+				}catch(Exception e){
+					err = true;
+					printException("Error: invalid class '%s' passed to '-r', skipping...", lArgs.get(i));
+				}
+				break;
+			case "-p":
+				try{
+					i++;
+					player = Class.forName(lArgs.get(i)).asSubclass(GamePlayer.class);
+					printInfo("Set player model to '%s'.", lArgs.get(i));
+					
+					listPArgs = new ArrayList<String>();
+					while(i+1 < lArgs.size() && !lArgs.get(i+1).startsWith("-")){
 						i++;
+						listPArgs.add(lArgs.get(i));
+						printInfo("Added pArg '%s'.", lArgs.get(i));
+					}
+				}catch(Exception e){
+					err = true;
+					printException("Error: invalid argument '%s' passed to '-p', skipping...", lArgs.get(i));
+				}
+				break;
+			case "-s":
+				while(i+1 < lArgs.size() && !lArgs.get(i+1).startsWith("-")){
+					i++;
+					try{
+						listStrategies.add(Class.forName(lArgs.get(i)).asSubclass(GameStrategy.class));
+						printInfo("Added strategy '%s'.", lArgs.get(i));
+					}catch(Exception e){
+						err = true;
+						printException("Error: invalid class '%s' passed to '-s', skipping...", lArgs.get(i));
+					}
+				}
+				break;
+			case "-i":
+				while(i+1 < lArgs.size() && !lArgs.get(i+1).startsWith("-")){
+					i++;
+					try{
+						if(files.contains(lArgs.get(i))){
+							err = true;
+							printException("Error: file '%s' specified multiple times, skipping...", lArgs.get(i));
+							continue;
+						}
+						files.add(lArgs.get(i));
+						
 						List<String> text = Files.readAllLines(FileSystems.getDefault().getPath(lArgs.get(i)));
 						for(String line : text){
 							for(String word : line.replaceAll("\t", " ").split(" ")){
 								if(word.length() > 0){
+									if(word.startsWith("//")){
+										break;
+									}
 									lArgs.add(word);
 								}
 							}
 						}
-						out.printf("GameTheorySimulator: Queueing arguments from '%s'.\n", lArgs.get(i));
+						printInfo("GameTheorySimulator: Queueing arguments from '%s'.", lArgs.get(i));
 					}catch(Exception e){
-						out.printf("Error: invalid file '%s' passed to '-i', ignoring...\n", lArgs.get(i));
+						err = true;
+						printException("Error: invalid file '%s' passed to '-i', skipping...", lArgs.get(i));
 					}
-				break;
-				case "-o":
-					try {
-						i++;
-						out.printf("GameTheorySimulator: redirecting output to '%s'\n",lArgs.get(i));
-						if(out != System.out)
-							out.close();
-					
-						Path p = FileSystems.getDefault().getPath(lArgs.get(i));
-						out = new PrintStream(Files.newOutputStream(p),true);
-						out.printf("GameTheorySimulator: redirecting output to '%s'\n",lArgs.get(i));
-					} catch (Exception e) {
-						out.printf("Error: could not create file '%s' passed to '-o', ignoring...\n", lArgs.get(i));
-						
-					}
-					break;
-				default:
-					out.printf("Warning: unexpected argument '%s', ignoring...\n", lArgs.get(i));
-					break;
 				}
-			}
-			out.println("-----");
+			break;
+			case "-o":
+				try {
+					i++;
 
+					if(files.contains(lArgs.get(i))){
+						err = true;
+						printException("Error: file '%s' specified multiple times, skipping...", lArgs.get(i));
+						continue;
+					}
+					files.add(lArgs.get(i));
+					
+					printInfo("GameTheorySimulator: redirecting output to '%s'",lArgs.get(i));
+					if(out != System.out)
+						out.close();
+				
+					Path p = FileSystems.getDefault().getPath(lArgs.get(i));
+					out = new PrintStream(Files.newOutputStream(p),true);
+					printInfo("GameTheorySimulator: redirecting output to '%s'",lArgs.get(i));
+				} catch (Exception e) {
+					err = true;
+					printException("Error: could not create file '%s' passed to '-o', skipping...", lArgs.get(i));
+				}
+				break;
+			default:
+				err = true;
+				printWarning("Warning: unexpected argument '%s', skipping...", lArgs.get(i));
+				break;
+			}
+		}
+		printResult("-----");
+		
 		try{
+			if(err && !alwaysYes){
+				System.out.printf("An error occurred while parsing the input parameters.%nContinue anyway?%n");
+				String s = "";
+				while(!s.equalsIgnoreCase("y") && !s.equalsIgnoreCase("n")){
+					System.out.println("(y/n)");
+					s = in.readLine();
+				}
+				if(s.equalsIgnoreCase("n")){
+					System.out.println("Aborted.");
+					return;
+				}
+				printResult("-----");
+			}
+			
 			if(listStrategies.size() < 2){
 				for(Class<?> c : defaultStrategies){
 					if(GameStrategy.class.isAssignableFrom(c))
@@ -207,18 +276,45 @@ public class GameMain {
 			GameRunner runner = new GameRunner(ruleSet, player, playerArgs, listStrategies, tourney, tourneyArgs);
 			runner.run();
 			
-			out.println("-----\nGameTheorySimulator: finished");
+			printInfo("-----\nGameTheorySimulator: finished");
 			if(out != System.out)
 				System.out.println("-----\nGameTheorySimulator: finished");
 			
 		}catch(Exception e){
-			e.printStackTrace();
-			if(out != System.out)
-				e.printStackTrace(out);
+			printException(e);
 		}finally{
 			if(out != System.out)
 				out.close();
 		}
 	}
 	
+	public static void printException(String msg, Object...objects){
+		if(verbosity >= errors){
+			out.printf(msg+"%n", objects);
+		}else{
+			System.err.printf(msg+"%n", objects);
+		}
+	}
+	public static void printException(Exception e){
+		if(verbosity >= errors){
+			e.printStackTrace(out);
+		}else{
+			e.printStackTrace();
+		}
+	}
+	public static void printException(Exception e, String msg, Object...objects){
+		printException(msg, objects);
+		printException(e);
+	}
+	public static void printInfo(String msg, Object...objects){
+		if(verbosity >= infos)
+			out.printf(msg+"%n", objects);
+	}
+	public static void printWarning(String msg, Object...objects){
+		if(verbosity >= warnings)
+			out.printf(msg+"%n", objects);
+	}
+	public static void printResult(String msg, Object...objects){
+		out.printf(msg+"%n", objects);
+	}
 }

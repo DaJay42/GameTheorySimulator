@@ -1,0 +1,18 @@
+//This file contains an example of dynamic interaction by circularly dominant strategies.
+-v	-1
+-o	log.txt
+-y
+-r	gamesim.gamerules.AxelrodPrisoners
+-p	gamesim.players.PlayerFaulty
+	0.003
+-t	gamesim.tourneys.EconomicModel
+	140
+	400
+	gamesim.tourneys.RoundRobinFixed
+	200
+-s	gamesim.strategies.FiftyFifty
+	gamesim.strategies.AlwaysC
+	gamesim.strategies.AlwaysD
+	gamesim.strategies.Alternate
+	gamesim.strategies.TitForTwoTat
+	gamesim.strategies.DTitForTat
