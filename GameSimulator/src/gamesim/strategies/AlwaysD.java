@@ -6,7 +6,7 @@ import gamesim.GameStrategy;
  * @author DaJay42
  *
  */
-public class AlwaysD implements GameStrategy {
+public class AlwaysD extends GameStrategy {
 
 	@Override
 	public Strategy first() {

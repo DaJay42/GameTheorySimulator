@@ -1,12 +1,17 @@
 package gamesim;
 
 /**
- * Implement this interface to create a Strategy.
+ * Extend this class to create a Strategy.
  *<br>Strategies MUST be fully constructible by the zero-argument constructor,
  * as only that will be called.
  * @author DaJay42
  */
-public interface GameStrategy {
+public abstract class GameStrategy extends GameEntity{
+	private GameStrategy(){}
+	
+	protected GameStrategy(String... args){
+		super(args);
+	}
 	
 	/**The two options possible have every round.
 	 * 'C'ooperate, or 'D'efect.

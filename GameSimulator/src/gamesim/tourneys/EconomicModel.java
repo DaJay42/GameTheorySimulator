@@ -1,10 +1,9 @@
 package gamesim.tourneys;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import gamesim.GameEntityReflector;
 import gamesim.GameMain;
 import gamesim.GamePlayer;
 import gamesim.GameThread;
@@ -33,17 +32,17 @@ public class EconomicModel extends GameTourney {
 	int generations = 50;
 	GameTourney model;
 	Class<? extends GameTourney> modelClass = RoundRobinDecay.class;
-	String[] arg0 = {};
 	int playercount;
 	int internalPlayers = 500;
-	double[][] pointHistory;
+	long[][] pointHistory; //beware of overflows/precision. long should be suitable enough
 	int[][] playerHistory;
 	int turn = 0;
+	String[] arg1;
 	
-	public EconomicModel(String...args) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException{
+	public EconomicModel(String...args) throws InstantiationException, ClassNotFoundException{
 		super(args);
 		if(args.length > 3)
-			arg0 = new String[args.length-3];
+			arg1 = new String[args.length-3];
 		for(int i = 0; i < args.length; i++){
 			switch(i){
 			case 0:
@@ -56,17 +55,11 @@ public class EconomicModel extends GameTourney {
 				modelClass = Class.forName(args[i]).asSubclass(GameTourney.class);
 				break;
 			default:
-				arg0[i-3] = args[i];
+				arg1[i-3] = args[i];
 			}
 		}
 		
-		for(Constructor<?> c : modelClass.getConstructors()){
-			if(c.getParameterTypes().length == 1 && c.getParameterTypes()[0] == String[].class){
-				Object[] o = {arg0};
-				model = (GameTourney) c.newInstance(o);
-				break;
-			}
-		}
+		model = (GameTourney) GameEntityReflector.createWithArgs(modelClass, arg1);
 	}
 	
 	@Override
@@ -86,7 +79,7 @@ public class EconomicModel extends GameTourney {
 	}
 
 	@Override
-	public void resetPlayers() throws InstantiationException, IllegalAccessException{
+	public void resetPlayers() throws InstantiationException{
 		super.resetPlayers();
 		model.resetPlayers();
 	}
@@ -97,7 +90,7 @@ public class EconomicModel extends GameTourney {
 	}
 
 	@Override
-	public GameThread[] getNextMatchUp() throws IllegalArgumentException, InvocationTargetException, InstantiationException, IllegalAccessException {
+	public GameThread[] getNextMatchUp() throws InstantiationException {
 		if(model.isFinished()){
 //			if(turn < 3){
 //				String[][] results;
@@ -118,22 +111,8 @@ public class EconomicModel extends GameTourney {
 			for(int i = 0; i < playercount; i++){
 				playerHistory[i][turn+1] = (int)(scale*pointHistory[i][turn]);
 			}
+			model = (GameTourney) GameEntityReflector.createWithArgs(modelClass, arg1);
 			
-			try {
-				if(arg0 == null)
-					model = model.getClass().newInstance();
-				else{
-					for(Constructor<?> c : model.getClass().getConstructors()){
-						if(c.getParameterTypes().length == 1 && c.getParameterTypes()[0] == String[].class){
-							Object[] o = {arg0};
-							this.model = (GameTourney) c.newInstance(o);
-							break;
-						}
-					}
-				}
-			} catch (InstantiationException | IllegalAccessException e) {
-				e.printStackTrace();
-			}
 			model.players = new ArrayList<GamePlayer>();
 			model.ruleset = ruleset;
 			for(int i = 0; i < playercount; i++){
@@ -180,9 +159,9 @@ public class EconomicModel extends GameTourney {
 	}
 
 	@Override
-	public void setup() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public void setup() throws InstantiationException {
 		playercount = players.size();
-		pointHistory = new double[playercount][generations+1];
+		pointHistory = new long[playercount][generations+1];
 		playerHistory = new int[playercount][generations+1];
 		for(int i = 0; i < playercount; i++){
 			playerHistory[i][0] = 1;

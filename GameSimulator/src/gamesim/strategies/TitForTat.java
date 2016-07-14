@@ -8,7 +8,7 @@ import gamesim.GameStrategy;
  * @author DaJay42
  *
  */
-public class TitForTat implements GameStrategy {
+public class TitForTat extends GameStrategy {
 
 	@Override
 	public Strategy first() {

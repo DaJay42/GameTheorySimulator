@@ -9,7 +9,7 @@ import gamesim.GameStrategy;
  * @author DaJay42
  *
  */
-public class Alternate implements GameStrategy {
+public class Alternate extends GameStrategy {
 
 	boolean flip = true;
 	

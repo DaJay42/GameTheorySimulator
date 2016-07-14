@@ -193,6 +193,8 @@ public class GameMain {
 							printException("Error: file '%s' specified multiple times, skipping...", lArgs.get(i));
 							continue;
 						}
+						
+						printInfo("GameTheorySimulator: Queueing arguments from '%s'.", lArgs.get(i));
 						files.add(lArgs.get(i));
 						
 						List<String> text = Files.readAllLines(FileSystems.getDefault().getPath(lArgs.get(i)));
@@ -206,7 +208,6 @@ public class GameMain {
 								}
 							}
 						}
-						printInfo("GameTheorySimulator: Queueing arguments from '%s'.", lArgs.get(i));
 					}catch(Exception e){
 						err = true;
 						printException("Error: invalid file '%s' passed to '-i', skipping...", lArgs.get(i));

@@ -7,7 +7,7 @@ import gamesim.GameStrategy;
  * @author DaJay42
  *
  */
-public class Joss implements GameStrategy {
+public class Joss extends GameStrategy {
 
 	@Override
 	public Strategy first() {

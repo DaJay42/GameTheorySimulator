@@ -6,7 +6,7 @@ import gamesim.GameStrategy;
  * @author DaJay42
  *
  */
-public class Pavlov implements GameStrategy {
+public class Pavlov extends GameStrategy {
 
 	boolean flip = false;
 	

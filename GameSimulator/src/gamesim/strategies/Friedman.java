@@ -10,7 +10,7 @@ import gamesim.GameStrategy;
  * severely disadvantaging unfriendly strategies.
  * @author DaJay42
  */
-public class Friedman implements GameStrategy {
+public class Friedman extends GameStrategy {
 
 	boolean triggered;
 	

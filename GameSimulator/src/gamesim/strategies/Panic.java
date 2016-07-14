@@ -9,7 +9,7 @@ import gamesim.GameStrategy;
  * @author DaJay42
  *
  */
-public class Panic implements GameStrategy {
+public class Panic extends GameStrategy {
 	
 	boolean alarmed;
 	int apology = 2;

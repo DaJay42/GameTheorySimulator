@@ -7,7 +7,7 @@ import gamesim.GameStrategy;
  * @author DaJay42
  * @see Friedman
  */
-public class Buddha implements GameStrategy {
+public class Buddha extends GameStrategy {
 
 	int slaps = 0;
 	

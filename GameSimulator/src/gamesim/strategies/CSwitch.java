@@ -6,7 +6,7 @@ import gamesim.GameStrategy;
  * @author DaJay42
  * @see Switch
  */
-public class CSwitch implements GameStrategy {
+public class CSwitch extends GameStrategy {
 	
 	Strategy last = Strategy.C;
 	boolean cautious = true;

@@ -8,7 +8,7 @@ import gamesim.GameStrategy;
  * @author DaJay42
  *
  */
-public class Switch implements GameStrategy {
+public class Switch extends GameStrategy {
 	
 	Strategy last = Strategy.C;
 	boolean cautious = false;

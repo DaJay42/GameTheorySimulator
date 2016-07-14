@@ -1,6 +1,5 @@
 package gamesim.tourneys;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -37,7 +36,7 @@ public class RoundRobinFixed extends GameTourney {
 			gamerounds = Integer.parseInt(args[0]);
 	}
 	
-	public void setup() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public void setup() throws InstantiationException {
 		playercount = players.size();
 		if(playercount % 2 == 1)
 			players.add(null);

@@ -6,7 +6,7 @@ import gamesim.GameStrategy;
  * @author DaJay42
  *
  */
-public class Grudge implements GameStrategy {
+public class Grudge extends GameStrategy {
 
 	int balance;
 	

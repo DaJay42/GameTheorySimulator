@@ -7,7 +7,7 @@ import gamesim.GameStrategy;
  * @author DaJay42
  *
  */
-public class TitForTwoTat implements GameStrategy {
+public class TitForTwoTat extends GameStrategy {
 
 	boolean angry = false;
 	@Override

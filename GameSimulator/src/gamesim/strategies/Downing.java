@@ -9,7 +9,7 @@ import gamesim.GameStrategy;
  * @author DaJay42
  *
  */
-public class Downing implements GameStrategy {
+public class Downing extends GameStrategy {
 
 	int cForC;
 	int dForC;

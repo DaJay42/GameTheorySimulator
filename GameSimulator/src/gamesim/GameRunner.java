@@ -1,7 +1,5 @@
 package gamesim;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -18,44 +16,28 @@ public class GameRunner{
 	ExecutorService pool;
 	
 	
-	public GameRunner(Class<? extends GameRuleSet> rules, Class<? extends GamePlayer> player, String[] playerArgs, ArrayList<Class<? extends GameStrategy>> strategies, Class<? extends GameTourney> tourney, String...tourneyArgs) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{		
-		for(Constructor<?> c : tourney.getConstructors()){
-			if(c.getParameterTypes().length == 1 && c.getParameterTypes()[0] == String[].class){
-				Object[] o = {tourneyArgs};
-				this.Tournament = (GameTourney) c.newInstance(o);
-				break;
-			}
-		}
-		if(Tournament == null){
-			throw new InstantiationException("No suitable constructor found for class "+tourney.getName()+" with args "+tourneyArgs.toString());
-		}
+	public GameRunner(Class<? extends GameRuleSet> rules,
+			Class<? extends GamePlayer> player, String[] playerArgs,
+			ArrayList<Class<? extends GameStrategy>> strategies,
+			Class<? extends GameTourney> tourney, String...tourneyArgs)
+					throws InstantiationException{
 		
-		Constructor<?> playerCon = null;
-		for(Constructor<?> c : player.getConstructors()){
-			if(c.getParameterTypes().length == 2 && c.getParameterTypes()[1] == String[].class){
-				playerCon = c;
-				break;
-			}
-		}
-		if(playerCon == null){
-			throw new InstantiationException("No suitable constructor found for class "+player.getName()+" with args "+playerArgs.toString());
-		}
-		
-		strats = strategies;
-		
-		Tournament.ruleset = rules.newInstance();
-		
+		Tournament = (GameTourney) GameEntityReflector.createWithArgs(tourney, tourneyArgs);
+		Tournament.ruleset = (GameRuleSet) GameEntityReflector.create(rules);
 		Tournament.players = new ArrayList<GamePlayer>();
 		
+		strats = strategies;
 		for(Class<? extends GameStrategy> s : strats){
-			Tournament.players.add((GamePlayer) playerCon.newInstance(new Object[]{s, playerArgs}));
+			Tournament.players.add(GameEntityReflector.createPlayer(player, s, playerArgs));
 		}
 		
-		if(GameMain.DO_THREADING)
-			pool = Executors.newCachedThreadPool();
+		if(GameMain.DO_THREADING){
+			int processors = Runtime.getRuntime().availableProcessors();
+			pool = Executors.newScheduledThreadPool(processors);
+		}
 	}
 	
-	public void run() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ExecutionException, InterruptedException{
+	public void run() throws InterruptedException, ExecutionException, InstantiationException{
 		
 		GameMain.printInfo("Tournament " + Tournament.getClass().getSimpleName()
 				+ " over " + Tournament.getRoundsDescriptor()

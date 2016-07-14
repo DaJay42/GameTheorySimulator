@@ -6,7 +6,7 @@ import gamesim.GameStrategy;
  * @author DaJay42
  *
  */
-public class FiftyFifty implements GameStrategy {
+public class FiftyFifty extends GameStrategy {
 
 	@Override
 	public Strategy first() {

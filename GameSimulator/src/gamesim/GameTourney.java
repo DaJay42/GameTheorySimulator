@@ -2,7 +2,6 @@ package gamesim;
 
 import gamesim.util.ScoreTuple;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,20 +10,17 @@ import java.util.List;
  * @author DaJay42
  *
  */
-public abstract class GameTourney {
+public abstract class GameTourney extends GameEntity{
 	public ArrayList<GamePlayer> players;
 	public GameRuleSet ruleset;
 	protected GameThread[] workers;
 	
-	@SuppressWarnings("unused")
-	private GameTourney() {
-		/*skip*/
-	}
-	protected GameTourney(String[] args) {
-		/*skip*/
-	}
 	
-	public void resetPlayers() throws InstantiationException, IllegalAccessException{
+	protected GameTourney(String[] args) {
+		super(args);
+	}
+
+	public void resetPlayers() throws InstantiationException{
 		for(GamePlayer player : players){
 			if(player != null)
 				player.reset();
@@ -39,11 +35,11 @@ public abstract class GameTourney {
 	
 	public abstract int getNumPlayers();
 	
-	public abstract GameThread[] getNextMatchUp() throws IllegalArgumentException, InvocationTargetException, InstantiationException, IllegalAccessException;
+	public abstract GameThread[] getNextMatchUp() throws InstantiationException;
 
 	public abstract void evaluate(GameThread[] workers);
 
-	public abstract void setup() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException;
+	public abstract void setup() throws InstantiationException;
 	
 	public abstract String[][] printResults();
 	

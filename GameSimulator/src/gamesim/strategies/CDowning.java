@@ -8,7 +8,7 @@ import gamesim.GameStrategy;
  * @author DaJay42
  * @see Downing
  */
-public class CDowning implements GameStrategy {
+public class CDowning extends GameStrategy {
 
 	int cForC;
 	int dForC;

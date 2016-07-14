@@ -1,8 +1,5 @@
 package gamesim;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import gamesim.GameStrategy.Strategy;
 
 
@@ -12,42 +9,28 @@ import gamesim.GameStrategy.Strategy;
  * @author DaJay42
  *
  */
-public abstract class GamePlayer {
+public abstract class GamePlayer extends GameEntity{
 	public int score;
 	public String name;
 	public GameStrategy myStrategy;
 	private Class<? extends GameStrategy> strategyType;
-	private String[] arg0 = {};
 	
-	@SuppressWarnings("unused")
-	private GamePlayer(){}
 	
-	public GamePlayer(Class<? extends GameStrategy> s, String...args) throws InstantiationException, IllegalAccessException{
+	public GamePlayer(Class<? extends GameStrategy> s, String...args) throws InstantiationException{
+		super(args);
 		strategyType = s;
 		name = strategyType.getSimpleName();
-		myStrategy = strategyType.newInstance();		
+		myStrategy = (GameStrategy) GameEntityReflector.create(strategyType);		
 		score = 0;
-		arg0 = args;
 	}
 	
-	public final void reset() throws InstantiationException, IllegalAccessException{
+	public final void reset() throws InstantiationException{
 		score = 0;
-		myStrategy = strategyType.newInstance();
+		myStrategy = (GameStrategy) GameEntityReflector.create(strategyType);	
 	}
 	
-	public final GamePlayer duplicate() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
-		GamePlayer p = null;
-		Object[] o = new Object[]{strategyType, arg0};
-		for(Constructor<?> c : this.getClass().getConstructors()){
-			if(c.getParameterTypes().length == 2 && c.getParameterTypes()[1] == String[].class){
-				p = (GamePlayer) c.newInstance(o);
-				break;
-			}
-		}
-		if(p == null){
-			throw new InstantiationException(String.format("No suitable constructor found for class %s with args {%s, %s}", getClass().getName(), o[0].toString(), o[1].toString()));
-		}
-		return p;
+	public final GamePlayer duplicate() throws InstantiationException{
+		return GameEntityReflector.createPlayer(this.getClass(), strategyType, arg0);
 	}
 	
 	public abstract Strategy first();
