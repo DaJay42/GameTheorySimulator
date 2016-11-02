@@ -56,7 +56,7 @@ import gamesim.players.*;
 public class GameMain {
 	
 	/**Set flag to use multithreading. Current results show that the overhead is not worth it.*/
-	public static final boolean DO_THREADING = false;
+	public static final boolean DO_THREADING = true;
 	
 	
 	/**  -1: results only (errors redirected to System.err)

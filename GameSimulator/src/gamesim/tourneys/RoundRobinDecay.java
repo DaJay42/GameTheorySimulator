@@ -1,5 +1,7 @@
 package gamesim.tourneys;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import gamesim.tourneys.RoundRobinFixed;
 
 /**Round Robin Tournament, but with a random number of rounds.
@@ -33,7 +35,7 @@ public class RoundRobinDecay extends RoundRobinFixed {
 	public int getRoundsPerGame(){
 		int i;
 		
-		for(i = 0; Math.random() < w; i++){}
+		for(i = 0; ThreadLocalRandom.current().nextDouble() < w; i++){}
 		
 		return i;
 	}

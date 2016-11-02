@@ -1,5 +1,7 @@
 package gamesim.strategies;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import gamesim.GameStrategy;
 
 /**A strategy by Johann Joss, as seen in Axelrod's first tournament.
@@ -16,7 +18,7 @@ public class Joss extends GameStrategy {
 
 	@Override
 	public Strategy next(Strategy Answer) {
-		return (Answer == Strategy.D || Math.random() < 0.1) ? Strategy.D : Strategy.C;
+		return (Answer == Strategy.D || ThreadLocalRandom.current().nextDouble() < 0.1) ? Strategy.D : Strategy.C;
 	}
 
 }

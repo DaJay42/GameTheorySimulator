@@ -89,6 +89,9 @@ public class GameRunner{
 			Tournament.resetPlayers();
 		}
 		
+		if(GameMain.DO_THREADING){
+			pool.shutdown();
+		}
 
 		GameMain.printInfo("-----");
 		

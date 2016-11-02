@@ -1,5 +1,7 @@
 package gamesim.players;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import gamesim.GamePlayer;
 import gamesim.GameStrategy;
 import gamesim.GameStrategy.Strategy;
@@ -31,13 +33,13 @@ public class PlayerFaulty extends GamePlayer {
 	@Override
 	public Strategy next(Strategy answer) {
 		Strategy s = myStrategy.next(answer);
-		return (Math.random() < faultChance) ? s.invert() : s;
+		return (ThreadLocalRandom.current().nextDouble() < faultChance) ? s.invert() : s;
 	}
 	
 	@Override
 	public Strategy first() {
 		Strategy s = myStrategy.first();
-		return (Math.random() < faultChance) ? s.invert() : s;
+		return (ThreadLocalRandom.current().nextDouble() < faultChance) ? s.invert() : s;
 	}
 
 	@Override
